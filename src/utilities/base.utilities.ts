@@ -1,15 +1,15 @@
-export const baseUtilities = {
-  messageBuilder: (
-    response: object | string,
-    error: boolean = false,
-    errorMessage: string = "",
-    successMessage: string = ""
-  ) => {
-    return {
-      data: response,
-      error: error,
-      errorMessage: errorMessage,
-      successMessage: successMessage,
-    };
-  },
+const messageBuilder = (
+  response: object | string | null = null,
+  error: boolean = false,
+  errorMessage: string | any = "",
+  successMessage: string = ""
+) => {
+  return {
+    data: response,
+    error: error,
+    errorMessage: errorMessage,
+    successMessage: successMessage,
+  };
 };
+
+export {messageBuilder};
