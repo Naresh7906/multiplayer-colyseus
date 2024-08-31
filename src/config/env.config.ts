@@ -7,4 +7,5 @@ export const envConfig = {
   AUTH_URL: process.env.AUTH_URL,
   AUTH_TOKEN_URL: process.env.AUTH_TOKEN_URL,
   SESSION_SECRET: process.env.SESSION_SECRET,
+  ENABLE_AUTH: process.env.ENABLE_AUTH === "true"
 };

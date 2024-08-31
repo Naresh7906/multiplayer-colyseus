@@ -39,6 +39,7 @@ function verify(
 }
 
 function checkAuth(req : Request | any, res : Response, next : NextFunction) {
+  if(!envConfig.ENABLE_AUTH) next()
   if (req.isAuthenticated()) return next();
   res.status(500).send(messageBuilder(null, true, "User not authenticated"));
 }
