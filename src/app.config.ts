@@ -5,6 +5,8 @@ import config from "@colyseus/tools";
  */
 import { baseRoutes } from "./routes/base.routes";
 import { BaseRoom } from "./rooms/Base.Room";
+import mongoose from "mongoose";
+import { envConfig } from "./config/env.config";
 
 export default config({
 
@@ -19,7 +21,7 @@ export default config({
     initializeExpress: baseRoutes,
 
 
-    beforeListen: () => {
+    beforeListen: async () => {
         /**
          * Before before gameServer.listen() is called.
          */
