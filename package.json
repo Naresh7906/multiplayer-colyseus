@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "tsx watch src/index.ts",
-    "dev": "nodemon --watch src --exec npm run start",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "loadtest": "tsx loadtest/example.ts --room my_room --numClients 2",
     "build": "npm run clean && tsc",
     "clean": "rimraf build",
@@ -32,6 +32,7 @@
     "@types/passport-discord": "^0.1.13",
     "mocha": "^10.2.0",
     "rimraf": "^5.0.0",
+    "ts-node-dev": "^2.0.0",
     "tsx": "^4.10.2",
     "typescript": "^5.0.4"
   },
@@ -47,7 +48,6 @@
     "helmet": "^7.1.0",
     "mongodb": "^6.8.0",
     "mongoose": "^8.6.0",
-    "nodemon": "^3.1.4",
     "passport": "^0.7.0",
     "passport-discord": "^0.1.4"
   }

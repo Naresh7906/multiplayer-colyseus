@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const UserDiscordModel = new Schema({
-  id: String,
+  _id: String,
   username: String,
   avatar: String,
   global_name: String,
@@ -10,9 +10,9 @@ const UserDiscordModel = new Schema({
 
 const DiscordUser = mongoose.model("DiscordUser", UserDiscordModel);
 
-function getUserDiscordModelFromJson(json: any) {
+function getUserDiscordModelFromJson(json: any) : mongoose.Document {
   let userDiscordModel = new DiscordUser();
-  userDiscordModel.id = json["id"];
+  userDiscordModel._id = json["id"];
   userDiscordModel.username = json["username"];
   userDiscordModel.avatar = json["avatar"];
   userDiscordModel.global_name = json["global_name"];
