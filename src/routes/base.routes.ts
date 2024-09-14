@@ -75,7 +75,7 @@ function getUserInfo(token: string): Promise<any> {
 }
 
 async function initializeApp(app: express.Express) {  
-  mongooseInstance = await mongoose.connect(envConfig.DATABASE_CONNECTION_STRING);
+  // mongooseInstance = await mongoose.connect(envConfig.DATABASE_CONNECTION_STRING)
   app.use(helmet());
   app.use(cors());
   app.use(
