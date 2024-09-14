@@ -35,6 +35,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+RUN echo 'port : ${PORT}'
+
 # Expose the port Colyseus will be using
 EXPOSE ${PORT}
 
