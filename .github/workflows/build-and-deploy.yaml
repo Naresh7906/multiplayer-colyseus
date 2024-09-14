@@ -82,10 +82,9 @@ jobs:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    environment: DOCKER_ENV
     needs: build
     environment:
-      name: 'Development'
+      name: 'DOCKER_ENV'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
