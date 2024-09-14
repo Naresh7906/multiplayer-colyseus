@@ -44,6 +44,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Print Docker Hub username
+        run: echo "Logged in as ${{ vars.DOCKERHUB_USERNAME }}"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3 # v3.0.0
 
