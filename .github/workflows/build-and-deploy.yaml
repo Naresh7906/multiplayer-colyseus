@@ -41,6 +41,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    enviroment: DOCKER_ENV
+
     steps:
       - uses: actions/checkout@v4
 
