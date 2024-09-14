@@ -29,4 +29,3 @@ describe("testing your Colyseus app", () => {
     assert.deepStrictEqual({ mySynchronizedProperty: "Hello world" }, client1.state.toJSON());
   });
 });
-
