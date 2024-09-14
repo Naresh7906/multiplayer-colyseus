@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      args:
+        ENV: ${ENV}
+        DATABASE_CONNECTION_STRING: ${DATABASE_CONNECTION_STRING}
+        CALLBACK_URL: ${CALLBACK_URL}
+        CLIENT_ID: ${CLIENT_ID}
+        CLIENT_SECRET: ${CLIENT_SECRET}
+        AUTH_URL: ${AUTH_URL}
+        AUTH_TOKEN_URL: ${AUTH_TOKEN_URL}
+        SESSION_SECRET: ${SESSION_SECRET}
+        ENABLE_AUTH: ${ENABLE_AUTH}
+        PORT: ${PORT}
+    environment:
+      - ENV=${ENV}
+      - DATABASE_CONNECTION_STRING=${DATABASE_CONNECTION_STRING}
+      - CALLBACK_URL=${CALLBACK_URL}
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - AUTH_URL=${AUTH_URL}
+      - AUTH_TOKEN_URL=${AUTH_TOKEN_URL}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - ENABLE_AUTH=${ENABLE_AUTH}
+      - PORT=${PORT}
+    ports:
+      - "${PORT}:${PORT}"

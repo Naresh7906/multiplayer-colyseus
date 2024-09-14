@@ -62,6 +62,17 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/multiplayer_zaresh:${{ github.sha }}
           file: ./Dockerfile
+          build-args: |
+            ENV=development
+            DATABASE_CONNECTION_STRING=${{ secrets.DATABASE_CONNECTION_STRING }}
+            CALLBACK_URL=${{ secrets.CALLBACK_URL }}
+            CLIENT_ID=${{ secrets.CLIENT_ID }}
+            CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
+            AUTH_URL=${{ secrets.AUTH_URL }}
+            AUTH_TOKEN_URL=${{ secrets.AUTH_TOKEN_URL }}
+            SESSION_SECRET=${{ secrets.SESSION_SECRET }}
+            ENABLE_AUTH=true
+            PORT=3000
 
   deploy:
     permissions:
@@ -82,4 +93,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: 'ghcr.io/${{ env.REPO }}:${{ github.sha }}'
+          images: '${{ vars.DOCKERHUB_USERNAME }}/multiplayer_zaresh:${{ github.sha }}'
