@@ -10,14 +10,15 @@ import { envConfig } from "../config/env.config";
 import axios from "axios";
 import { endpointsConfig } from "../config/endpoints.config";
 import mongoose, { Mongoose } from "mongoose";
+import {
+  DiscordUser,
+  getUserDiscordModelFromJson,
+  UserDiscordModel,
+} from "../models/user.discord.model";
+import { mongooseService } from "../services/database/mongoose.service";
 
-let mongooseInstance : Mongoose | null = null;
-
-export function baseRoutes(app: express.Express) {
-  initializeApp(app);
-  app.get("/hello_world", (req, res) => {
-    res.send("It's time to kick ass and chew bubblegum!");
-  });
+export async function baseRoutes(app: express.Express) {
+  await initializeApp(app);
   if (process.env.NODE_ENV !== "production") {
     app.use("/playground", playground);
   }
@@ -43,8 +44,10 @@ export function baseRoutes(app: express.Express) {
   });
   app.get("/info", checkAuth, async function (req, res) {
     try {
+      let id = req.query.id;
       let userData = await getUserInfo(
-        req.headers.authorization.replace("Bearer ", "")
+        req.headers.authorization.replace("Bearer ", ""),
+        id?.toString()
       );
       res
         .status(201)
@@ -56,26 +59,41 @@ export function baseRoutes(app: express.Express) {
   });
 }
 
-function getUserInfo(token: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const axiosConfig = axios.get(endpointsConfig.DISCORD_USER_ENDPOINT, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    axiosConfig
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.error("Unable to verify user with discord", error);
-        reject(error);
+function getUserInfo(token: string, id: string | undefined): Promise<any> {
+  return new Promise(async (resolve, reject) => {
+    if (id) {
+      let userData = await DiscordUser.findById(id).exec();
+
+      if (!userData) {
+        reject("User not found");
+      } else resolve(userData.toJSON());
+    } else {
+      const axiosConfig = axios.get(endpointsConfig.DISCORD_USER_ENDPOINT, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+      axiosConfig
+        .then(async (response) => {
+          const userData: mongoose.Document = getUserDiscordModelFromJson(
+            response.data
+          );
+          try {
+            await userData.save();
+          } catch (error) {
+            console.error("Unable to save user data", error);
+          }
+          resolve(userData.toJSON());
+        })
+        .catch((error) => {
+          console.error("Unable to verify user with discord", error);
+          reject(error);
+        });
+    }
   });
 }
 
-async function initializeApp(app: express.Express) {  
-  // mongooseInstance = await mongoose.connect(envConfig.DATABASE_CONNECTION_STRING)
+async function initializeApp(app: express.Express) {
   app.use(helmet());
   app.use(cors());
   app.use(

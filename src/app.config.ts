@@ -1,19 +1,13 @@
 import config from "@colyseus/tools";
 
-/**
- * Import your Room files
- */
 import { baseRoutes } from "./routes/base.routes";
 import { BaseRoom } from "./rooms/Base.Room";
-import mongoose from "mongoose";
-import { envConfig } from "./config/env.config";
+import { mongooseService } from "./services/database/mongoose.service";
 
 export default config({
 
     initializeGameServer: (gameServer) => {
-        /**
-         * Define your room handlers:
-         */
+
         gameServer.define('base_room', BaseRoom);
 
     },
@@ -22,8 +16,7 @@ export default config({
 
 
     beforeListen: async () => {
-        /**
-         * Before before gameServer.listen() is called.
-         */
+        console.log("Connecting to MongoDB");
+        mongooseService;
     }
 });
