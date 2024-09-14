@@ -39,6 +39,7 @@ permissions:
 
 jobs:
   build:
+    enviroment: DOCKER_ENV
     runs-on: ubuntu-latest
 
     steps:
