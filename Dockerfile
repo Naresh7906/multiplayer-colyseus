@@ -36,7 +36,7 @@ RUN npm install
 COPY . .
 
 # Expose the port Colyseus will be using
-EXPOSE 3000
+EXPOSE ${PORT}
 
 # Command to start the server with ts-node-dev for live reload
 CMD ["npm", "run", "dev"]
