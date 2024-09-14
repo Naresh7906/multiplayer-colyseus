@@ -16,6 +16,7 @@ import {
   UserDiscordModel,
 } from "../models/user.discord.model";
 import { mongooseService } from "../services/database/mongoose.service";
+import { getUserInfo } from "../services/base/user.base.services";
 
 export async function baseRoutes(app: express.Express) {
   await initializeApp(app);
@@ -25,9 +26,11 @@ export async function baseRoutes(app: express.Express) {
   app.use("/colyseus", monitor());
 
   app.get("/health", (req, res) => {
-    res.status(200).send(messageBuilder("Server Running"));
+    res.status(200).send(messageBuilder("Server Running normally"));
   });
-  app.get("/login", PS.authenticate("discord"));
+  app.get("/login", (req,res)=>{
+    res.status(201).send(messageBuilder("Login success"))
+  });
   app.get(
     "/callback",
     PS.authenticate("discord", { failureRedirect: "/" }),
@@ -59,40 +62,6 @@ export async function baseRoutes(app: express.Express) {
   });
 }
 
-function getUserInfo(token: string, id: string | undefined): Promise<any> {
-  return new Promise(async (resolve, reject) => {
-    if (id) {
-      let userData = await DiscordUser.findById(id).exec();
-
-      if (!userData) {
-        reject("User not found");
-      } else resolve(userData.toJSON());
-    } else {
-      const axiosConfig = axios.get(endpointsConfig.DISCORD_USER_ENDPOINT, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      axiosConfig
-        .then(async (response) => {
-          const userData: mongoose.Document = getUserDiscordModelFromJson(
-            response.data
-          );
-          try {
-            await userData.save();
-          } catch (error) {
-            console.error("Unable to save user data", error);
-          }
-          resolve(userData.toJSON());
-        })
-        .catch((error) => {
-          console.error("Unable to verify user with discord", error);
-          reject(error);
-        });
-    }
-  });
-}
-
 async function initializeApp(app: express.Express) {
   app.use(helmet());
   app.use(cors());
@@ -105,4 +74,5 @@ async function initializeApp(app: express.Express) {
   );
   app.use(PS.initialize());
   app.use(PS.session());
+  app.use(checkAuth);
 }

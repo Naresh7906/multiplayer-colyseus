@@ -35,8 +35,10 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+RUN npm run build
+
 # Expose the port Colyseus will be using
 EXPOSE $PORT
 
 # Command to start the server with ts-node-dev for live reload
-CMD ["npm", "run", "dev"]
+CMD ["node", "build/index.js"]

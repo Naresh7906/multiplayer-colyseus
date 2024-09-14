@@ -43,7 +43,7 @@ function verify(
 
 async function checkAuth(req: Request, res: Response, next: NextFunction) {
   if (!envConfig.ENABLE_AUTH) next();
-  if (req.headers.authorization) {
+  else if (req.headers.authorization) {
     try {
       let data = await verifyWithDiscord(
         req.headers.authorization.replace("Bearer ", "")
@@ -51,11 +51,13 @@ async function checkAuth(req: Request, res: Response, next: NextFunction) {
       next();
     } catch (error) {
       res
-        .status(500)
+        .status(401)
         .send(messageBuilder(null, true, "User not authenticated"));
+      return;
     }
   } else
-    res.status(500).send(messageBuilder(null, true, "User not authenticated"));
+    res.status(401).send(messageBuilder(null, true, "User not authenticated"));
+  return;
 }
 
 function verifyWithDiscord(token: string): Promise<any> {
