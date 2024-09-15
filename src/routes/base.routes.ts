@@ -24,6 +24,8 @@ export async function baseRoutes(app: express.Express) {
     app.use("/playground", playground);
   }
   app.use("/colyseus", monitor());
+  
+  app.use(checkAuth);
 
   app.get("/health", (req, res) => {
     res.status(200).send(messageBuilder("Server Running normally"));
@@ -74,5 +76,4 @@ async function initializeApp(app: express.Express) {
   );
   app.use(PS.initialize());
   app.use(PS.session());
-  app.use(checkAuth);
 }
